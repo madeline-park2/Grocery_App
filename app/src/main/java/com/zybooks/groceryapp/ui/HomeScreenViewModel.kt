@@ -1,4 +1,4 @@
-package com.zybooks.groceryapp
+package com.zybooks.groceryapp.ui.ui
 
 import androidx.lifecycle.ViewModel
 

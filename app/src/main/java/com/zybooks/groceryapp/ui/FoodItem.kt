@@ -1,6 +1,4 @@
-package com.zybooks.groceryapp
-
-import java.util.Date
+package com.zybooks.groceryapp.ui.ui
 
 data class FoodItem (
     var foodItem: String = "",

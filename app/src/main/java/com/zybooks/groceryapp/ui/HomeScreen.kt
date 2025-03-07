@@ -1,11 +1,11 @@
-package com.zybooks.groceryapp
+package com.zybooks.groceryapp.ui.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun GroceryScreen(
+fun HomeScreen(
     modifier: Modifier = Modifier,
-    groceryScreenViewModel: GroceryScreenViewModel = GroceryScreenViewModel()
+    homeScreenViewModel: HomeScreenViewModel = HomeScreenViewModel()
 ) {
 }
