@@ -1,2 +1,2 @@
-package com.zybooks.groceryapp.ui.ui
+package com.zybooks.groceryapp.ui
 

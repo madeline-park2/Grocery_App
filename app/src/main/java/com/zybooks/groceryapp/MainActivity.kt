@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.zybooks.groceryapp.ui.ui.GroceryApp
-import com.zybooks.groceryapp.ui.ui.theme.GroceryAppTheme
+import com.zybooks.groceryapp.ui.GroceryApp
+import com.zybooks.groceryapp.ui.theme.GroceryAppTheme
 
 
 class MainActivity : ComponentActivity() {

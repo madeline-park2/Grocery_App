@@ -1,4 +1,4 @@
-package com.zybooks.groceryapp.ui.ui
+package com.zybooks.groceryapp.ui
 
 data class FoodItem (
     var foodItem: String = "",

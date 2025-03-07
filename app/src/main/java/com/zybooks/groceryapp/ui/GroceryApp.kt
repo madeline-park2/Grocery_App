@@ -1,4 +1,4 @@
-package com.zybooks.groceryapp.ui.ui
+package com.zybooks.groceryapp.ui
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack

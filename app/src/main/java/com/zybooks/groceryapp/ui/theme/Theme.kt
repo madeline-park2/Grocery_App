@@ -1,4 +1,4 @@
-package com.zybooks.groceryapp.ui.ui.theme
+package com.zybooks.groceryapp.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

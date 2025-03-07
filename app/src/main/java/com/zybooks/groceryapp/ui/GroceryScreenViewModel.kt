@@ -1,4 +1,4 @@
-package com.zybooks.groceryapp.ui.ui
+package com.zybooks.groceryapp.ui
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
