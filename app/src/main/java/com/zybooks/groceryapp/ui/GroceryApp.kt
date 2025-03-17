@@ -28,6 +28,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.zybooks.groceryapp.data.Food
 import kotlinx.serialization.Serializable
 
 
@@ -109,7 +110,7 @@ fun GroceryApp() {
                 }
             )
         }
-        composable<Routes.Recipe> { backstackEntry ->
+        /*composable<Routes.Recipe> { backstackEntry ->
             val details: Routes.Recipe = backstackEntry.toRoute()
 
             RecipeScreen(
@@ -123,7 +124,7 @@ fun GroceryApp() {
                     navController.navigateUp()
                 }
             )
-        }
+        } */
     }
 }
 
@@ -149,4 +150,9 @@ fun GroceryAppBar(
             }
         }
     )
+}
+
+@Composable
+fun CreateText(s: Food) {
+    val textField = Text(s.foodItem)
 }

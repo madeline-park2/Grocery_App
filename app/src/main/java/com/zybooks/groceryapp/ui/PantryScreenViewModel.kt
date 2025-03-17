@@ -26,8 +26,6 @@ class PantryScreenViewModel(
     savedStateHandle: SavedStateHandle,
     private val foodRepo: FoodRepository
 ) : ViewModel() {
-
-
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
@@ -53,30 +51,6 @@ class PantryScreenViewModel(
             foodItemList = foods[0]
         )
     }
-
-    /*val uiState: Flow<PantryScreenUiState> =
-            foodRepo.getAllPantry()
-                .map {
-                    PantryScreenUiState(
-                        foodItemList = it
-                    )
-                }
-                .stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(5000L),
-                    initialValue = PantryScreenUiState()
-                ) */
-        /*foodRepo.getAllPantry()
-            .map {
-                PantryScreenUiState(
-                    foodItemList = it
-                )
-            }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000L),
-                initialValue = PantryScreenUiState()
-            ) */
 
 }
 
