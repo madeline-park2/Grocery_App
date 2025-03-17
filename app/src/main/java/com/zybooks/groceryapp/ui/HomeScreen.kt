@@ -32,14 +32,14 @@ fun HomeScreen(
     ) { innerPadding ->
         LazyColumn (
             //columns = GridCells.Adaptive(minSize = 128.dp),
-            contentPadding = PaddingValues(0.dp),
-            modifier = modifier.padding(innerPadding)
+            contentPadding = PaddingValues(20.dp),
+            modifier = modifier.padding(innerPadding),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            items(3) { index ->
+            items(2) { index ->
                 Row(
                     modifier = modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     Button(
                         onClick = { onButtonClick(index) },
@@ -49,7 +49,7 @@ fun HomeScreen(
                         when (index) {
                             0 -> Text("Your Pantry")
                             1 -> Text("Your Groceries")
-                            2 -> Text("Your Recipes")
+                            //2 -> Text("Your Recipes")
                         }
 
                     }

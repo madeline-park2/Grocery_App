@@ -179,7 +179,7 @@ fun CreateText(
             Row(
                 modifier = modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceAround
             ) {
                 Text(s.foodItem,
                     modifier = modifier.padding(start = 12.dp))
