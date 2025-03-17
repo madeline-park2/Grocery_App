@@ -38,8 +38,10 @@ class FoodRepository(context: Context) {
 
 
     fun addFood(food: Food) {
-        CoroutineScope(Dispatchers.IO).launch {
-            food.id = foodDao.addFood(food)
+        if (food.foodItem.trim() != "") {
+            CoroutineScope(Dispatchers.IO).launch {
+                food.id = foodDao.addFood(food)
+            }
         }
     }
 

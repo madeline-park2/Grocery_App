@@ -5,6 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FoodDao {
+    @Insert
+    suspend fun insert(food: Food): Long
+
     @Query("SELECT * FROM Food WHERE inPantry = 1 AND id = :id")
     fun getPantryItem(id: Long): Flow<Food>
 

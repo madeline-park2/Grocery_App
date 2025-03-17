@@ -7,8 +7,7 @@ import com.zybooks.groceryapp.ui.FoodItem
 
 @Entity
 data class Food(
-    @PrimaryKey(autoGenerate = true)
-    var id: Long = 0,
+    @PrimaryKey(autoGenerate = true) var id: Long = 0,
     var foodItem: String = "", //FoodItem(), item, quantity -> will build into this when called
     var quantity: Int = 0,
     var inPantry: Int = 0,  // will be 0 or 1, one or the other
