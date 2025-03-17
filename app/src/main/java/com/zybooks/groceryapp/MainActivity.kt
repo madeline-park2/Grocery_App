@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    GroceryApp() // change this to GroceryApp, call screens in app
+                    GroceryApp()
                 }
             }
         }

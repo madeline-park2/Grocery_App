@@ -1,23 +1,51 @@
 package com.zybooks.groceryapp.ui
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-//import kotlinx.serialization.Serializable
+import androidx.navigation.toRoute
+import kotlinx.serialization.Serializable
 
-/*sealed class Routes {
+
+sealed class Routes {
     @Serializable
-    data object List */
+    data object Login
+
+    @Serializable
+    data object Home
+
+    @Serializable
+    data object Pantry
+
+    @Serializable
+    data object Grocery
+
+    @Serializable
+    data object Recipe
 
     /*@Serializable
     data class Detail(
@@ -28,8 +56,76 @@ import androidx.navigation.compose.rememberNavController
     data class Adopt(
         val petId: Int
     ) */
-//}
+}
 
+@Composable
+fun GroceryApp() {
+    val navController = rememberNavController()
+    NavHost(
+        navController = navController,
+        startDestination = Routes.Home
+    ) {
+        composable<Routes.Home> {
+            HomeScreen(
+                onButtonClick = { index ->
+                    navController.navigate(
+                        when (index) {
+                            0 -> Routes.Pantry
+                            1 -> Routes.Grocery
+                            2 -> Routes.Recipe
+                            else -> Routes.Home
+                        }
+                    )
+                }
+            )
+        }
+        composable<Routes.Grocery> { backstackEntry ->
+            val details: Routes.Grocery = backstackEntry.toRoute()
+
+            GroceryScreen(
+                /*petId = details.petId,
+                onAdoptClick = {
+                    navController.navigate(
+                        Routes.Adopt(details.petId)
+                    )
+                }, */
+                onUpClick = {
+                    navController.navigateUp()
+                }
+            )
+        }
+        composable<Routes.Pantry> { backstackEntry ->
+            val details: Routes.Pantry = backstackEntry.toRoute()
+
+            PantryScreen(
+                /*petId = details.petId,
+                onAdoptClick = {
+                    navController.navigate(
+                        Routes.Adopt(details.petId)
+                    )
+                }, */
+                onUpClick = {
+                    navController.navigateUp()
+                }
+            )
+        }
+        composable<Routes.Recipe> { backstackEntry ->
+            val details: Routes.Recipe = backstackEntry.toRoute()
+
+            RecipeScreen(
+                /*petId = details.petId,
+                onAdoptClick = {
+                    navController.navigate(
+                        Routes.Adopt(details.petId)
+                    )
+                }, */
+                onUpClick = {
+                    navController.navigateUp()
+                }
+            )
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,13 +148,5 @@ fun GroceryAppBar(
                 }
             }
         }
-    )
-}
-@Composable
-fun GroceryApp() {
-    val navController = rememberNavController()
-    NavHost(
-        navController = navController,
-        startDestination = Routes.List
     )
 }

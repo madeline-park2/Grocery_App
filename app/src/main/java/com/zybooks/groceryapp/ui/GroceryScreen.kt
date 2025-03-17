@@ -12,12 +12,15 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun GroceryScreen(
     modifier: Modifier = Modifier,
-    groceryScreenViewModel: GroceryScreenViewModel = GroceryScreenViewModel()
+    groceryScreenViewModel: GroceryScreenViewModel = GroceryScreenViewModel(),
+    onUpClick: () -> Unit = { }
 ) {
     Scaffold(
         topBar = {
             GroceryAppBar(
-                title = "Find a Friend"
+                title = "Your Groceries",
+                canNavigateBack = true,
+                onUpClick = onUpClick
             )
         }
     ) { innerPadding ->
