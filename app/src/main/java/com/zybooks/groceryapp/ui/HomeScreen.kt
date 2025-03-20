@@ -26,7 +26,8 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             GroceryAppBar(
-                title = "Home"
+                title = "Home",
+                onDeleteClick = {}
             )
         }
     ) { innerPadding ->

@@ -1,5 +1,6 @@
 package com.zybooks.groceryapp.ui
 
+import android.view.View
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -31,16 +33,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.zybooks.groceryapp.data.Food
+import com.zybooks.groceryapp.data.FoodRepository
 import kotlinx.serialization.Serializable
 
 
 sealed class Routes {
-
     @Serializable
     data object Home
 
@@ -53,15 +60,6 @@ sealed class Routes {
     @Serializable
     data object Recipe
 
-    /*@Serializable
-    data class Detail(
-        val petId: Int
-    )
-
-    @Serializable
-    data class Adopt(
-        val petId: Int
-    ) */
 }
 
 @Composable
@@ -98,12 +96,6 @@ fun GroceryApp() {
             val details: Routes.Pantry = backstackEntry.toRoute()
 
             PantryScreen(
-                /*petId = details.petId,
-                onAdoptClick = {
-                    navController.navigate(
-                        Routes.Adopt(details.petId)
-                    )
-                }, */
                 onUpClick = {
                     navController.navigateUp()
                 }
@@ -113,12 +105,6 @@ fun GroceryApp() {
             val details: Routes.Recipe = backstackEntry.toRoute()
 
             RecipeScreen(
-                /*petId = details.petId,
-                onAdoptClick = {
-                    navController.navigate(
-                        Routes.Adopt(details.petId)
-                    )
-                }, */
                 onUpClick = {
                     navController.navigateUp()
                 }
@@ -134,6 +120,7 @@ fun GroceryAppBar(
     modifier: Modifier = Modifier,
     canNavigateBack: Boolean = false,
     onUpClick: () -> Unit = { },
+    onDeleteClick: () -> Unit,
 ) {
     TopAppBar(
         title = { Text(title) },
@@ -146,6 +133,11 @@ fun GroceryAppBar(
                 IconButton(onClick = onUpClick) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
                 }
+            }
+        },
+        actions = {
+            IconButton(onClick = onDeleteClick) {
+                Icon(Icons.Filled.Delete, "Delete")
             }
         }
     )
@@ -171,14 +163,6 @@ fun CreateText(
                     modifier = modifier.padding(start = 12.dp))
                 Text(s.quantity.toString(),
                     modifier = modifier.padding(end = 12.dp))
-
-                DecItemCount(
-                    items = s.quantity,
-                    //f = s,
-                    onConfirmation = {
-                        s.quantity
-                    }
-                )
 
             }
 
@@ -235,23 +219,62 @@ fun AddDialog(
 }
 
 @Composable
-fun DecItemCount(
-    onConfirmation: (Int) -> Unit,
-    //f: Food,
-    items: Int
+fun DelDialog(
+    onConfirmation: (String) -> Unit,
+    onDismissRequest: () -> Unit,
 ) {
-    //var food = f
-    var numItems by remember { mutableIntStateOf(items) }
+    var subject by remember { mutableStateOf("") }
 
-    Button(
-        onClick = {
-            //onConfirmation(food)
-            if (numItems > 0) {
-                onConfirmation(numItems--)
+    AlertDialog(
+        onDismissRequest = {
+            onDismissRequest()
+        },
+        title = {
+            TextField(
+                label = { Text("Index?") },
+                value = subject,
+                onValueChange = { subject = it },
+                singleLine = true,
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        onConfirmation(subject)
+                    }
+                ),
+            )
+        },
+        confirmButton = {
+            Button(
+                /*colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                ), */
+                onClick = {
+                    onConfirmation(subject)
+                }) {
+                Text(text = "Delete")
             }
-                  },
+        },
+        dismissButton = {
+            Button(
+                /*colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondary
+                ), */
+                onClick = {
+                    onDismissRequest()
+                }) {
+                Text(text = "Cancel")
+            }
+        },
+    )
+}
+
+@Composable
+fun DecItemCount(
+    onDeleteClick: () -> Unit,
+    //modifier: Modifier
     ) {
-        Text(numItems.toString())
+
+    Button(onClick = onDeleteClick) {
+        Text("Delete")
     }
 }
 
