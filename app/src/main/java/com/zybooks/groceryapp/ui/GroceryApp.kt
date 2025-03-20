@@ -1,31 +1,25 @@
 package com.zybooks.groceryapp.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import android.view.View
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
@@ -38,23 +32,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.zybooks.groceryapp.data.Food
+import com.zybooks.groceryapp.data.FoodRepository
 import kotlinx.serialization.Serializable
 
 
 sealed class Routes {
-    @Serializable
-    data object Login
-
     @Serializable
     data object Home
 
@@ -67,15 +60,6 @@ sealed class Routes {
     @Serializable
     data object Recipe
 
-    /*@Serializable
-    data class Detail(
-        val petId: Int
-    )
-
-    @Serializable
-    data class Adopt(
-        val petId: Int
-    ) */
 }
 
 @Composable
@@ -112,12 +96,6 @@ fun GroceryApp() {
             val details: Routes.Pantry = backstackEntry.toRoute()
 
             PantryScreen(
-                /*petId = details.petId,
-                onAdoptClick = {
-                    navController.navigate(
-                        Routes.Adopt(details.petId)
-                    )
-                }, */
                 onUpClick = {
                     navController.navigateUp()
                 }
@@ -127,12 +105,6 @@ fun GroceryApp() {
             val details: Routes.Recipe = backstackEntry.toRoute()
 
             RecipeScreen(
-                /*petId = details.petId,
-                onAdoptClick = {
-                    navController.navigate(
-                        Routes.Adopt(details.petId)
-                    )
-                }, */
                 onUpClick = {
                     navController.navigateUp()
                 }
@@ -148,6 +120,7 @@ fun GroceryAppBar(
     modifier: Modifier = Modifier,
     canNavigateBack: Boolean = false,
     onUpClick: () -> Unit = { },
+    onDeleteClick: () -> Unit,
 ) {
     TopAppBar(
         title = { Text(title) },
@@ -160,6 +133,11 @@ fun GroceryAppBar(
                 IconButton(onClick = onUpClick) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
                 }
+            }
+        },
+        actions = {
+            IconButton(onClick = onDeleteClick) {
+                Icon(Icons.Filled.Delete, "Delete")
             }
         }
     )
@@ -185,13 +163,6 @@ fun CreateText(
                     modifier = modifier.padding(start = 12.dp))
                 Text(s.quantity.toString(),
                     modifier = modifier.padding(end = 12.dp))
-
-                DecItemCount(
-                    items = s.quantity,
-                    onConfirmation = {
-                        s.quantity
-                    }
-                )
 
             }
 
@@ -248,17 +219,62 @@ fun AddDialog(
 }
 
 @Composable
-fun DecItemCount(
-    onConfirmation: (Int) -> Unit,
-    items: Int
+fun DelDialog(
+    onConfirmation: (String) -> Unit,
+    onDismissRequest: () -> Unit,
 ) {
-    var numItems by remember { mutableIntStateOf(items) }
+    var subject by remember { mutableStateOf("") }
 
-    Button(
-        onClick = {
-            onConfirmation(numItems--) },
+    AlertDialog(
+        onDismissRequest = {
+            onDismissRequest()
+        },
+        title = {
+            TextField(
+                label = { Text("Index?") },
+                value = subject,
+                onValueChange = { subject = it },
+                singleLine = true,
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        onConfirmation(subject)
+                    }
+                ),
+            )
+        },
+        confirmButton = {
+            Button(
+                /*colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                ), */
+                onClick = {
+                    onConfirmation(subject)
+                }) {
+                Text(text = "Delete")
+            }
+        },
+        dismissButton = {
+            Button(
+                /*colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondary
+                ), */
+                onClick = {
+                    onDismissRequest()
+                }) {
+                Text(text = "Cancel")
+            }
+        },
+    )
+}
+
+@Composable
+fun DecItemCount(
+    onDeleteClick: () -> Unit,
+    //modifier: Modifier
     ) {
-        Text(numItems.toString())
+
+    Button(onClick = onDeleteClick) {
+        Text("Delete")
     }
 }
 

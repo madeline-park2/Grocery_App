@@ -8,8 +8,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.zybooks.groceryapp.data.FoodRepository
 
 @Composable
 fun PantryScreen(
@@ -33,12 +35,25 @@ fun PantryScreen(
         )
     }
 
+    if (uiState.value.isDelDialogVisible) {
+        DelDialog(
+            onConfirmation = { food ->
+                pantryScreenViewModel.hideDelDialog()
+                pantryScreenViewModel.delPantryItem(food.filterNot { it.isWhitespace() }.toInt())
+            },
+            onDismissRequest = {
+                pantryScreenViewModel.hideDelDialog()
+            },
+        )
+    }
+
     Scaffold(
         topBar = {
             GroceryAppBar(
                 title = "Your Pantry",
                 canNavigateBack = true,
-                onUpClick = onUpClick
+                onUpClick = onUpClick,
+                onDeleteClick = { pantryScreenViewModel.showDelDialog() }
             )
         },
         floatingActionButton = {

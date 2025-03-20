@@ -3,6 +3,8 @@ package com.zybooks.groceryapp.ui
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -33,12 +35,25 @@ fun GroceryScreen(
         )
     }
 
+    if (uiState.value.isDelDialogVisible) {
+        DelDialog(
+            onConfirmation = { food ->
+                groceryScreenViewModel.hideDelDialog()
+                groceryScreenViewModel.delGroceryItem(food.filterNot { it.isWhitespace() }.toInt())
+            },
+            onDismissRequest = {
+                groceryScreenViewModel.hideDelDialog()
+            },
+        )
+    }
+
     Scaffold(
         topBar = {
             GroceryAppBar(
                 title = "Your Grocery List",
                 canNavigateBack = true,
-                onUpClick = onUpClick
+                onUpClick = onUpClick,
+                onDeleteClick = { groceryScreenViewModel.showDelDialog() }
             )
         },
         floatingActionButton = {
@@ -47,11 +62,11 @@ fun GroceryScreen(
             ) {
                 Icon(Icons.Filled.Add, "Add")
             }
-        }
+        },
     ) { innerPadding ->
         Grid(
             foodList = uiState.value.foodItemList,
-            modifier = modifier.padding(innerPadding)
+            modifier = modifier.padding(innerPadding),
         )
     }
 }
