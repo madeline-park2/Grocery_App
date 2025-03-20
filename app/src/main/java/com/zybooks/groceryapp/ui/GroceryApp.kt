@@ -13,6 +13,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -121,6 +123,7 @@ fun GroceryAppBar(
     canNavigateBack: Boolean = false,
     onUpClick: () -> Unit = { },
     onDeleteClick: () -> Unit,
+    onMoveClick: () -> Unit,
 ) {
     TopAppBar(
         title = { Text(title) },
@@ -137,9 +140,17 @@ fun GroceryAppBar(
         },
         actions = {
             IconButton(onClick = onDeleteClick) {
-                Icon(Icons.Filled.Delete, "Delete")
+                if (title != "Home") {
+                    Icon(Icons.Filled.Delete, "Delete")
+                }
+            }
+            IconButton(onClick = onMoveClick) {
+                if (title != "Home") {
+                    Icon(Icons.Filled.Share, "Move")
+                }
             }
         }
+
     )
 }
 
@@ -268,14 +279,52 @@ fun DelDialog(
 }
 
 @Composable
-fun DecItemCount(
-    onDeleteClick: () -> Unit,
-    //modifier: Modifier
-    ) {
+fun MoveDialog(
+    onConfirmation: (String) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    var subject by remember { mutableStateOf("") }
 
-    Button(onClick = onDeleteClick) {
-        Text("Delete")
-    }
+    AlertDialog(
+        onDismissRequest = {
+            onDismissRequest()
+        },
+        title = {
+            TextField(
+                label = { Text("Index?") },
+                value = subject,
+                onValueChange = { subject = it },
+                singleLine = true,
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        onConfirmation(subject)
+                    }
+                ),
+            )
+        },
+        confirmButton = {
+            Button(
+                /*colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                ), */
+                onClick = {
+                    onConfirmation(subject)
+                }) {
+                Text(text = "Move")
+            }
+        },
+        dismissButton = {
+            Button(
+                /*colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondary
+                ), */
+                onClick = {
+                    onDismissRequest()
+                }) {
+                Text(text = "Cancel")
+            }
+        },
+    )
 }
 
 @Composable

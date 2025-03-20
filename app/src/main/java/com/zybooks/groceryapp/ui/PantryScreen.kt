@@ -47,13 +47,26 @@ fun PantryScreen(
         )
     }
 
+    if (uiState.value.isMoveDialogVisible) {
+        MoveDialog(
+            onConfirmation = { food ->
+                pantryScreenViewModel.hideMoveDialog()
+                pantryScreenViewModel.movePantryItem(food.filterNot { it.isWhitespace() }.toInt())
+            },
+            onDismissRequest = {
+                pantryScreenViewModel.hideMoveDialog()
+            },
+        )
+    }
+
     Scaffold(
         topBar = {
             GroceryAppBar(
                 title = "Your Pantry",
                 canNavigateBack = true,
                 onUpClick = onUpClick,
-                onDeleteClick = { pantryScreenViewModel.showDelDialog() }
+                onDeleteClick = { pantryScreenViewModel.showDelDialog() },
+                onMoveClick = { pantryScreenViewModel.showMoveDialog() }
             )
         },
         floatingActionButton = {

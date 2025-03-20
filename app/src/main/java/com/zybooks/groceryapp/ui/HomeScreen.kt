@@ -27,7 +27,8 @@ fun HomeScreen(
         topBar = {
             GroceryAppBar(
                 title = "Home",
-                onDeleteClick = {}
+                onDeleteClick = {},
+                onMoveClick = {}
             )
         }
     ) { innerPadding ->

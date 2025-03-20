@@ -30,6 +30,7 @@ class PantryScreenViewModel(
 
     private val isDialogVisible = MutableStateFlow(false)
     private val isDelDialogVisible = MutableStateFlow(false)
+    private val isMoveDialogVisible = MutableStateFlow(false)
 
     val uiState: StateFlow<PantryScreenUiState> = transformedFlow()
         .stateIn(
@@ -41,25 +42,30 @@ class PantryScreenViewModel(
     private fun transformedFlow() = combine(
         foodRepo.getAllPantry(),
         isDialogVisible,
-        isDelDialogVisible
-    ) { foods, dialogVisible, dec ->
+        isDelDialogVisible,
+        isMoveDialogVisible
+    ) { foods, dialogVisible, dec, m ->
         PantryScreenUiState(
             foodItemList = foods,
             isDialogVisible = dialogVisible,
-            isDelDialogVisible = dec
+            isDelDialogVisible = dec,
+            isMoveDialogVisible = m
         )
     }
     fun addPantryItem(item: String, quantity: Int) {
         foodRepo.addFood(Food(foodItem = item, quantity = quantity, inPantry = 1, inGrocery = 0))
     }
 
+    fun movePantryItem(index: Int) {
+        val x = uiState.value.foodItemList[index]
+        foodRepo.addFood(Food(foodItem = x.foodItem, quantity = x.quantity, inPantry = 0, inGrocery = 1))
+        foodRepo.deleteFood(x)
+    }
+
     fun delPantryItem(index: Int) {
         foodRepo.deleteFood(uiState.value.foodItemList[index])
     }
 
-    fun getItem(ind: Long) {
-        foodRepo.getPantryItem(ind)
-    }
 
     fun showDialog() {
         isDialogVisible.value = true
@@ -77,10 +83,19 @@ class PantryScreenViewModel(
         isDelDialogVisible.value = false
     }
 
+    fun showMoveDialog() {
+        isMoveDialogVisible.value = true
+    }
+
+    fun hideMoveDialog() {
+        isMoveDialogVisible.value = false
+    }
+
 }
 
 data class PantryScreenUiState(
     val foodItemList: List<Food> = emptyList(),
     val isDialogVisible: Boolean = false,
     val isDelDialogVisible: Boolean = false,
+    val isMoveDialogVisible: Boolean = false
 )
