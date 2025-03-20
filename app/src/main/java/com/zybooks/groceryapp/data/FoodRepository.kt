@@ -30,9 +30,6 @@ class FoodRepository(context: Context) {
 
     private val foodDao = database.foodDao()
 
-    fun getPantryItem(id: Long) = foodDao.getPantryItem(id)
-    fun getGroceryItem(id: Long) = foodDao.getGroceryItem(id)
-
     fun getAllPantry() = foodDao.getAllPantry()
     fun getAllGrocery() = foodDao.getAllGrocery()
 

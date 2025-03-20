@@ -47,13 +47,26 @@ fun GroceryScreen(
         )
     }
 
+    if (uiState.value.isMoveDialogVisible) {
+        MoveDialog(
+            onConfirmation = { food ->
+                groceryScreenViewModel.hideMoveDialog()
+                groceryScreenViewModel.moveGroceryItem(food.filterNot { it.isWhitespace() }.toInt())
+            },
+            onDismissRequest = {
+                groceryScreenViewModel.hideMoveDialog()
+            },
+        )
+    }
+
     Scaffold(
         topBar = {
             GroceryAppBar(
                 title = "Your Grocery List",
                 canNavigateBack = true,
                 onUpClick = onUpClick,
-                onDeleteClick = { groceryScreenViewModel.showDelDialog() }
+                onDeleteClick = { groceryScreenViewModel.showDelDialog() },
+                onMoveClick = { groceryScreenViewModel.showMoveDialog() }
             )
         },
         floatingActionButton = {
